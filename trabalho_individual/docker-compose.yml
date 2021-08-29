@@ -17,6 +17,25 @@ services:
     networks:
       - app_network
 
+  users-service:
+    build: ./users-service
+    volumes:
+      - ./users-service/src:/usr/app/src
+    ports:
+      - "7101:7101"
+    depends_on:
+      - users-service-db
+
+  users-service-db:
+    image: mysql:5.7.20
+    ports:
+      - "7201:3306"
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
 networks:
   app_network:
 
