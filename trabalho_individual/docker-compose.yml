@@ -59,6 +59,8 @@ services:
   chat-service-db:
     image: mysql:5.7.20
     container_name: chat-service-db
+    volumes: 
+      - db_data:/var/lib/mysql
     env_file:
       - .env
     environment:
@@ -66,6 +68,17 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports: 
       - 7200:3306
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 7300:80
+    volumes: 
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+    depends_on:
+      - chat-service-db
+      - users-service-db
 
 
 networks:
