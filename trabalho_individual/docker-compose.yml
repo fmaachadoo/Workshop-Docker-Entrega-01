@@ -14,8 +14,6 @@ services:
       - ./api-gateway:/src
     environment:
       DB_CONNECTION: ${DB_CONNECTION}
-    networks:
-      - app_network
 
   users-service:
     build: ./users-service
@@ -32,6 +30,8 @@ services:
       - "7201:3306"
     env_file:
       - .env
+    volumes:
+      - users-service-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -59,8 +59,8 @@ services:
   chat-service-db:
     image: mysql:5.7.20
     container_name: chat-service-db
-    volumes: 
-      - db_data:/var/lib/mysql
+    volumes:
+      - chat-service-data:/var/lib/mysql
     env_file:
       - .env
     environment:
@@ -80,11 +80,6 @@ services:
       - chat-service-db
       - users-service-db
 
-
-networks:
-  app_network:
-
-
 volumes:
-  db_data:
-  node_modules_front: 
+  users-service-data:
+  chat-service-data: 
